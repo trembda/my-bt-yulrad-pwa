@@ -1,0 +1,2535 @@
+<!doctype html>
+<html lang="fr" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#0B0F14" />
+  <title>Générateur BT CM &amp; Relâche</title>
+  <style>
+/* ==========================================================================
+   BT CM & Relâche TOC — Styles v1.2
+   ========================================================================== */
+
+:root{
+  --safe-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  --headbar-h: 70px;
+  --wrap-pad: 16px;
+  --shadow: 0 18px 50px rgba(0,0,0,.60);
+
+  /* Dark (default) */
+  --bg:#0F2433;
+  --panel:#1F3A4D;
+  --ink:#FFFFFF;
+  --muted:#C7D6E2;
+  --line:#3E6E94;
+  --ok:#2dd4bf;
+  --warn:#fbbf24;
+  --bad:#fb7185;
+  --field-font:14px;
+  --output-font:11px;
+  --tab-bg:#2E5878;
+  --tab-fg:#C7D6E2;
+  --tab-active-bg:#C9A227;
+  --tab-active-fg:#000000;
+  --btn-bg:#2E5878;
+  --btn-fg:#FFFFFF;
+  --btn-border:#3E6E94;
+  --btn-primary-bg:#274E6B;
+  --btn-primary-border:#6FA8DC;
+  --btn-good-bg:#1C6A57;
+  --btn-good-border:#2AAE90;
+  --btn-good-fg:#EFFFFB;
+  --btn-warn-bg:#5B2A2A;
+  --btn-warn-border:#A13A3A;
+  --btn-warn-fg:#FFE8E8;
+  --pre-bg:#0B1620;
+  --pre-fg:#EAF2F8;
+  --rel-bg:#183247;
+  --footer-bg: rgba(15,36,51,0.95);
+  --navc-red: #C8102E;
+}
+
+@media (max-width: 640px){
+  :root{
+    --wrap-pad: 12px;
+    --field-font: 16px;
+    --output-font: 12px;
+  }
+}
+
+body.theme-light{
+  --bg:#EAF1F7;
+  --panel:#FFFFFF;
+  --ink:#0B1B2A;
+  --muted:#38566F;
+  --line:#A9C0D4;
+  --tab-bg:#D5E4F0;
+  --tab-fg:#244055;
+  --tab-active-bg:#C9A227;
+  --tab-active-fg:#000000;
+  --btn-bg:#D5E4F0;
+  --btn-fg:#0B1B2A;
+  --btn-border:#A9C0D4;
+  --btn-primary-bg:#BBD3E6;
+  --btn-primary-border:#6FA8DC;
+  --btn-good-bg:#CFEFE7;
+  --btn-good-border:#2AAE90;
+  --btn-good-fg:#0B1B2A;
+  --btn-warn-bg:#F3D6D6;
+  --btn-warn-border:#A13A3A;
+  --btn-warn-fg:#2A0B0B;
+  --pre-bg:#F7FAFD;
+  --pre-fg:#0B1B2A;
+  --rel-bg:#F3F8FC;
+  --footer-bg: rgba(234,241,247,0.95);
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  padding-bottom: calc(48px + var(--safe-bottom));
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overscroll-behavior: none;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+h1{ margin: 12px 0 18px; text-align: center; font-size: 22px; }
+
+[hidden]{ display: none !important; }
+
+/* Status bar protection */
+.statusBarProtection{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--safe-top);
+  background: var(--bg);
+  z-index: 1001;
+}
+
+/* ===========================
+   NavCanada accent + Headbar
+   =========================== */
+.headbar{
+  position: fixed;
+  top: var(--safe-top);
+  left: 0; right: 0;
+  z-index: 1000;
+  background: var(--bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: nowrap;
+  margin: 0;
+  padding: 6px 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.30);
+  border-top: 3px solid var(--navc-red);
+}
+
+.head-group{
+  width: min(1040px, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tabs{
+  display: flex;
+  gap: 8px;
+  flex: 0 1 520px;
+  width: min(520px, 100%);
+  max-width: 520px;
+  min-width: 0;
+  justify-content: center;
+  margin: 0;
+}
+
+.tab{
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--tab-bg);
+  color: var(--tab-fg);
+  padding: 10px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 44px;
+}
+.tab.active{
+  background: var(--tab-active-bg);
+  border-color: color-mix(in srgb, var(--tab-active-bg), #000 15%);
+  color: var(--tab-active-fg);
+  box-shadow:
+    0 0 0 1px rgba(163,122,0,0.25) inset,
+    0 6px 0 rgba(0,0,0,.32),
+    0 14px 20px rgba(0,0,0,.18);
+}
+
+.head-actions{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+/* Lang toggle */
+.langToggle{
+  min-width: 50px;
+  height: 44px;
+  border-radius: 14px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  border-color: var(--btn-primary-border);
+  background: var(--btn-primary-bg);
+  color: var(--btn-fg);
+}
+
+/* Theme toggle */
+.themeToggle{
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.headClear{
+  height: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px){
+  .headbar{ padding: 10px 12px; }
+  .head-actions{ justify-content: center; }
+  .headClear{ height: 48px; min-height: 48px; border-radius: 16px; font-size: 15px; padding: 0 16px; }
+  .tabs{ width: 100%; max-width: none; gap: 10px; }
+  .tab{ padding: 12px 14px; min-height: 48px; font-size: 15px; }
+  .themeToggle{ width: 48px; height: 48px; border-radius: 16px; }
+  .langToggle{ height: 48px; border-radius: 16px; }
+  .card{ padding: 12px; border-radius: 14px; }
+  .row{ grid-template-columns: 1fr; gap: 10px; }
+  label{ margin-top: 10px; }
+  input, textarea{ padding: 12px; border-radius: 14px; }
+  textarea{ min-height: 120px; }
+  .btns{ gap: 10px; margin-top: 14px; }
+  button{ min-height: 48px; padding: 12px 14px; border-radius: 14px; font-size: 15px; }
+  #tab_rel{
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    text-align: center;
+  }
+  #tab_rel .tabWrap{
+    display: block;
+    white-space: pre-line;
+    line-height: 1.05;
+  }
+}
+
+@media (max-width: 420px){
+  .headbar{ padding: 6px 8px; gap: 6px; }
+  .tabs{ gap: 6px; max-width: none; }
+  .tab{ min-height: 42px; padding: 10px 8px; font-size: 13px; }
+  .head-actions{ gap: 6px; }
+  .themeToggle{ width: 42px; height: 42px; border-radius: 14px; }
+  .langToggle{ min-width: 44px; height: 42px; border-radius: 14px; padding: 0 8px; }
+}
+@media (max-width: 360px){
+  .tab{ font-size: 12px; padding: 9px 7px; }
+  .themeToggle{ width: 40px; height: 40px; border-radius: 13px; }
+}
+
+/* ===========================
+   Wrap / contenu
+   =========================== */
+.wrap{
+  max-width: 1600px;
+  width: calc(100% - 192px);
+  margin: 0 auto;
+  padding: var(--wrap-pad);
+  padding-top: calc(var(--wrap-pad) + var(--safe-top) + var(--headbar-h));
+}
+@media (max-width: 900px){ .wrap{ width: calc(100% - 32px); } }
+@media (max-width: 640px){ .wrap{ width: calc(100% - 24px); } }
+
+/* Utilitaires */
+.hidden{ display: none !important; }
+.divider{
+  height: 1px;
+  background: var(--line);
+  margin: 14px 0;
+  border-radius: 999px;
+  opacity: .95;
+}
+.center{ justify-content: center; }
+.stack{ display: flex; flex-direction: column; gap: 8px; }
+.mini-grid{ display: grid; gap: 8px; grid-template-columns: 1fr; }
+.cols-2{ grid-template-columns: repeat(2, 1fr); }
+.span-2{ grid-column: 1 / -1; }
+
+.right-actions{
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.copy-hint{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ok);
+  opacity: 0;
+  transform: translateY(-1px);
+  transition: opacity 160ms ease;
+  user-select: none;
+  min-height: 20px;
+}
+.copy-hint.show{ opacity: 1; }
+#copy_hint_rel{ display: none !important; }
+
+/* Layout cartes */
+.grid{ display: grid; gap: 8px; grid-template-columns: 1fr; }
+@media (min-width: 980px){
+  .grid{ grid-template-columns: 1.25fr 1fr; }
+  .grid.grid-rel{ grid-template-columns: 1fr 1fr; }
+  #view_bt .grid{ grid-template-columns: 1fr 1fr; }
+}
+.card{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+}
+.row{ display: grid; gap: 6px; grid-template-columns: 1fr; }
+@media (min-width: 700px){ .row{ grid-template-columns: repeat(3, 1fr); } }
+
+/* Labels */
+label{
+  display: block;
+  font-size: 18px;
+  color: var(--muted);
+  margin: 6px 0 4px;
+  text-align: center;
+}
+.lbl-top-center{ text-align: center; }
+.lbl-center{ text-align: center; }
+
+/* Checkboxes */
+.checks{ display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; align-items: center; }
+.inline{ margin: 0; display: flex; gap: 8px; align-items: center; }
+.checks label, .inline label{ text-align: left; font-size: 14px; margin: 0; color: var(--muted); }
+input[type="checkbox"]{
+  width: 18px; height: 18px;
+  transform: scale(1.5);
+  transform-origin: center;
+  accent-color: var(--tab-active-bg);
+}
+.media-checks{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.media-checks .inline{ margin: 0; }
+
+/* Champs */
+input, textarea{
+  width: 100%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #000000;
+  background: #ffffff;
+  color: #000000;
+  font-size: var(--field-font);
+  font-family: inherit;
+}
+input[type="date"]{ color-scheme: light; }
+input[type="date"]::-webkit-calendar-picker-indicator{
+  filter: invert(0) brightness(0);
+  opacity: .9;
+}
+input::placeholder, textarea::placeholder{ color: rgba(0,0,0,.45); }
+textarea{ min-height: 96px; resize: vertical; }
+
+/* Statuts */
+.status{ margin-top: 10px; font-size: 13px; }
+.status.ok{ color: var(--ok); }
+.status.warn{ color: var(--warn); }
+.status.bad{ color: var(--bad); }
+.small{ font-size: 12px; color: var(--muted); }
+
+/* Sortie (pre) */
+pre{
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--pre-bg);
+  color: var(--pre-fg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  margin: 0;
+  line-height: 1.3;
+  min-height: 140px;
+  font-size: var(--output-font);
+  font-family: inherit;
+}
+
+/* ===========================
+   Boutons
+   =========================== */
+.btns{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.btn{ min-width: 140px; }
+.relBtns{ gap: 18px; justify-content: center; flex-wrap: wrap; }
+button{ touch-action: manipulation; }
+button{
+  cursor: pointer;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+button.primary{ background: var(--btn-primary-bg); border-color: var(--btn-primary-border); }
+button.good{ background: var(--btn-good-bg); border-color: var(--btn-good-border); color: var(--btn-good-fg); }
+button.warn{ background: var(--btn-warn-bg); border-color: var(--btn-warn-border); color: var(--btn-warn-fg); }
+button.danger{ border-color: #5F1414; background: #8B1E1E; color: #FFFFFF; }
+button:disabled{ cursor: not-allowed; opacity: 0.5; }
+
+/* Icon buttons */
+.iconBtn{
+  width: 54px;
+  min-width: 54px;
+  height: 48px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+}
+
+#view_bt .btns{ justify-content: center; }
+#view_rel .btns{ justify-content: center; }
+#btn_gen{ margin-left: auto; margin-right: auto; }
+#btn_rel_add{ margin: 0; }
+
+/* Effet bouton mécanique */
+button{
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  position: relative;
+  box-shadow: 0 6px 0 rgba(0,0,0,.32), 0 14px 20px rgba(0,0,0,.18);
+  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease;
+}
+button::after{
+  content: "";
+  position: absolute;
+  left: 1px; right: 1px; top: 1px;
+  height: 32%;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, rgba(255,255,255,.14), rgba(255,255,255,0));
+  pointer-events: none;
+  opacity: .55;
+}
+.headbar button::after{ display: none !important; }
+button:not(.themeToggle):not(.langToggle):active:not(:disabled),
+button:not(.themeToggle):not(.langToggle).isPressed:not(:disabled){
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 rgba(0,0,0,.32), 0 8px 14px rgba(0,0,0,.15);
+  filter: brightness(.98);
+}
+.themeToggle:active:not(:disabled),
+.themeToggle.isPressed:not(:disabled),
+.langToggle:active:not(:disabled),
+.langToggle.isPressed:not(:disabled){
+  box-shadow: 0 3px 0 rgba(0,0,0,.32), 0 8px 14px rgba(0,0,0,.15);
+  filter: brightness(.98);
+}
+@media (hover:hover){ button:hover:not(:disabled){ filter: brightness(1.03); } }
+button:focus-visible{
+  outline: 2px solid color-mix(in srgb, var(--btn-border), var(--ink) 35%);
+  outline-offset: 2px;
+}
+
+/* ===========================
+   Relâche — blocs
+   =========================== */
+.release-block{
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  margin-top: 12px;
+  background: var(--rel-bg);
+}
+.release-head{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.release-title{ font-size: 13px; color: var(--ink); font-weight: 700; white-space: nowrap; }
+.release-copy{
+  border-color: var(--btn-primary-border);
+  background: var(--btn-primary-bg);
+  color: var(--btn-fg);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
+}
+.release-actions{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.release-del{
+  border-color: #5F1414;
+  background: #8B1E1E;
+  color: #FFFFFF;
+  font-size: 20px;
+}
+.release-del:hover{ filter: brightness(1.06); }
+.release-remove{
+  border-color: #5F1414;
+  background: #8B1E1E;
+  color: #FFFFFF;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  flex: 1 1 0;
+  min-height: 48px;
+}
+
+.rel-pair{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  align-items: start;
+  margin-top: 8px;
+}
+@media (max-width: 360px){ .rel-pair{ grid-template-columns: 1fr; } }
+
+/* ===========================
+   Popover technologue
+   =========================== */
+.tech-pop{
+  position: fixed;
+  z-index: 9999;
+  background: #0c121a;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: var(--shadow);
+  max-height: 280px;
+  overflow: auto;
+  min-width: 240px;
+}
+.tech-pop-head{ display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.tech-pop-title{ font-weight: 800; color: var(--ink); }
+.tech-row{ display: flex; align-items: center; gap: 10px; }
+.tech-pick{
+  border-color: var(--btn-primary-border);
+  background: var(--btn-primary-bg);
+  color: var(--btn-fg);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.tech-close{
+  border-color: #5F1414;
+  background: #8B1E1E;
+  color: #FFFFFF;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-weight: 800;
+}
+.tech-item{
+  display: block; width: 100%; text-align: left;
+  padding: 8px 10px; margin-top: 8px;
+  border-radius: 10px; border: 1px solid transparent;
+  background: transparent; color: var(--ink); font-weight: 650; cursor: pointer;
+}
+.tech-item.sel{ background: #0b1f1d; border-color: #134e4a; color: #bff7ef; }
+@media (max-width: 640px){
+  .tech-pop{
+    left: 12px !important; right: 12px !important;
+    top: 90px !important; width: auto !important;
+    max-height: calc(100vh - 140px);
+  }
+}
+
+/* ===========================
+   Confirm modal
+   =========================== */
+.cModalOverlay{
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 5000;
+}
+.cModal{
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: calc(18px + var(--safe-top)) 18px calc(18px + var(--safe-bottom));
+  z-index: 5001;
+}
+.cModalCard{
+  width: min(440px, 90vw);
+  background: var(--panel); color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.30);
+  padding: 16px 16px 14px;
+}
+.cModalTitle{ margin: 0 0 8px; text-align: center; font-weight: 800; font-size: 18px; }
+.cModalMsg{ text-align: center; color: var(--muted); font-size: 14px; line-height: 1.35; margin: 0 0 14px; }
+.cModalBtns{ display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; }
+.cModalBtns .btn{ min-width: 140px; }
+.cModalOverlay[hidden], .cModal[hidden]{ display: none !important; }
+
+@media (max-width: 420px){
+  .cModalCard{ width: min(360px, 92vw); padding: 14px 14px 12px; border-radius: 16px; }
+  .cModalTitle{ font-size: 17px; }
+  .cModalMsg{ font-size: 13px; }
+  .cModalBtns{ flex-direction: column; gap: 10px; }
+  .cModalBtns .btn{ width: 100%; min-width: 0; }
+}
+
+/* ===========================
+   Changelog modal
+   =========================== */
+.changelogContent{
+  max-height: 320px;
+  overflow-y: auto;
+  margin-bottom: 14px;
+  padding-right: 4px;
+}
+.cl-entry{ margin-bottom: 16px; }
+.cl-entry:last-child{ margin-bottom: 0; }
+.cl-version{
+  font-weight: 800;
+  color: var(--ok);
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 4px;
+}
+.cl-date{ font-weight: 400; font-size: 11px; color: var(--muted); }
+.cl-list{
+  margin: 6px 0 0;
+  padding-left: 18px;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.cl-list li{ margin-bottom: 2px; }
+
+/* ===========================
+   Footer — FIXED (sans transform pour éviter le bug zoom)
+   =========================== */
+.bt-footer{
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  /* NOTE: pas de transform ici — évite le bug de repositionnement au zoom */
+  padding: 10px 16px calc(10px + var(--safe-bottom));
+  border-top: 1px solid var(--line);
+  background: var(--footer-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* Help "?" button dans le footer */
+.helpBtn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid var(--muted);
+  background: transparent;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0;
+  min-width: 0;
+  min-height: 0;
+  /* Annule l'effet 3D normal des boutons */
+  box-shadow: none !important;
+  transition: color 150ms, border-color 150ms, background 150ms;
+  line-height: 1;
+}
+.helpBtn::after{ display: none !important; }
+.helpBtn:not(.themeToggle):active:not(:disabled),
+.helpBtn.isPressed:not(:disabled){
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none;
+}
+.helpBtn:hover:not(:disabled){
+  color: var(--ink) !important;
+  border-color: var(--ink) !important;
+  background: transparent !important;
+  filter: none !important;
+}
+
+/* Animation de transition de langue */
+@keyframes langFlash {
+  0%   { opacity: 1; }
+  30%  { opacity: 0.4; }
+  100% { opacity: 1; }
+}
+.lang-transitioning{ animation: langFlash 250ms ease; }
+
+</style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:c4de3286e4404d308169bd1bdc29a935 msdt:dt="string">Proprietary / Exclusif|a9d36c23-cfa8-4bda-ad55-10e31d671e63</mso:c4de3286e4404d308169bd1bdc29a935>
+<mso:TaxCatchAll msdt:dt="string">1;#Proprietary / Exclusif|a9d36c23-cfa8-4bda-ad55-10e31d671e63</mso:TaxCatchAll>
+<mso:SecurityClassification msdt:dt="string">1;#Proprietary / Exclusif|a9d36c23-cfa8-4bda-ad55-10e31d671e63</mso:SecurityClassification>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+</head>
+
+<body>
+  <div class="statusBarProtection"></div>
+
+  <!-- Barre d'en-tête fixe -->
+  <div class="headbar">
+    <div class="head-group">
+      <div class="tabs">
+        <button class="tab active" id="tab_bt" type="button" onclick="setTab('bt')">
+          <span data-i18n="tab_bt">BT correctif</span>
+        </button>
+        <button class="tab" id="tab_rel" type="button" onclick="setTab('rel')">
+          <span class="tabWrap" id="tab_rel_text">Demande<br>de relâche</span>
+        </button>
+      </div>
+
+      <div class="head-actions">
+        <button class="langToggle" id="lang_toggle" type="button"
+          aria-label="Switch language / Changer la langue"
+          title="Switch language / Changer la langue"
+          onclick="toggleLang()">
+          <span id="lang_icon">EN</span>
+        </button>
+        <button class="themeToggle" id="theme_toggle" type="button"
+          aria-label="Basculer le thème jour/nuit"
+          data-i18n-title="theme_title"
+          title="Thème jour/nuit"
+          onclick="toggleTheme()">
+          <span id="theme_icon" aria-hidden="true">🌙</span>
+        </button>
+        <button class="danger headClear" id="btn_clear_top" type="button"
+          data-i18n-aria="clear_all" aria-label="Tout effacer" title="Tout effacer">
+          <span data-i18n="clear_all">Tout effacer</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="wrap">
+
+    <!-- ===================== TAB 1 : BT ===================== -->
+    <section id="view_bt">
+      <div class="grid">
+        <!-- LEFT -->
+        <div class="stack">
+          <div class="card">
+            <div class="row">
+              <div>
+                <label class="lbl-center" data-i18n="lbl_bt_num">BT du TOC</label>
+                <input id="bt" />
+              </div>
+              <div>
+                <label class="lbl-center" data-i18n="lbl_site">Site</label>
+                <input id="site" />
+              </div>
+              <div>
+                <label class="lbl-center" data-i18n="lbl_equip">Équipement</label>
+                <input id="equip" />
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <label data-i18n="lbl_sympt">Symptômes</label>
+            <textarea id="sympt"></textarea>
+
+            <label data-i18n="lbl_diag">Diagnostic</label>
+            <textarea id="diag"></textarea>
+
+            <label data-i18n="lbl_act">Actions correctives</label>
+            <textarea id="act"></textarea>
+
+            <label data-i18n="lbl_act_plan">Actions correctives à planifier</label>
+            <textarea id="act_plan"></textarea>
+
+            <div class="checks media-checks" style="margin-top:12px;">
+              <div class="inline">
+                <input type="checkbox" id="chk_photos">
+                <label for="chk_photos" style="margin:0; color:var(--ink); font-size:13px;" data-i18n="chk_photos">Photo(s)</label>
+              </div>
+              <div class="inline">
+                <input type="checkbox" id="chk_logs">
+                <label for="chk_logs" style="margin:0; color:var(--ink); font-size:13px;" data-i18n="chk_logs">Log(s)</label>
+              </div>
+              <div class="inline">
+                <input type="checkbox" id="chk_plans">
+                <label for="chk_plans" style="margin:0; color:var(--ink); font-size:13px;" data-i18n="chk_plans">Plan(s)</label>
+              </div>
+              <div class="inline">
+                <input type="checkbox" id="chk_emails">
+                <label for="chk_emails" style="margin:0; color:var(--ink); font-size:13px;" data-i18n="chk_emails_lbl">Courriel(s)</label>
+              </div>
+            </div>
+
+            <div id="status" class="status small"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="card">
+          <label data-i18n="lbl_wo">Bon de travail</label>
+          <pre id="out_txt"></pre>
+
+          <div class="right-actions">
+            <button class="good" id="btn_copy_right" type="button" disabled>
+              <span data-i18n="btn_copy_bt">Copier le texte</span>
+            </button>
+            <span id="copy_hint" class="copy-hint" aria-live="polite"></span>
+          </div>
+
+          <label style="margin-top:14px;" data-i18n="lbl_toc_email">Courriel au TOC</label>
+          <pre id="out_toc"></pre>
+
+          <div class="right-actions">
+            <button class="good" id="btn_copy_toc" type="button" disabled>
+              <span data-i18n="btn_copy_toc">Copier le courriel</span>
+            </button>
+
+            <div class="checks center" style="margin:0; width:100%;">
+              <div class="inline" style="margin:0;">
+                <input type="checkbox" id="chk_close_bt">
+                <label for="chk_close_bt" style="margin:0; color:var(--ink); font-size:13px;" data-i18n="chk_close_bt">Fermer le BT</label>
+              </div>
+            </div>
+
+            <span id="copy_hint_toc" class="copy-hint" aria-live="polite"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== TAB 2 : RELÂCHE ===================== -->
+    <section id="view_rel" class="hidden">
+      <div class="grid grid-rel">
+        <!-- LEFT -->
+        <div class="stack">
+          <div class="mini-grid cols-2">
+            <div class="card span-2">
+              <label data-i18n="lbl_rel_site">Site / Destination</label>
+              <input id="rel_site" data-i18n-ph="ph_rel_site" placeholder="Ex. : YZV (Sept-Îles)" />
+
+              <div class="mini-grid cols-2" style="margin-top:8px;">
+                <div>
+                  <label data-i18n="lbl_rel_from">Du</label>
+                  <input id="rel_from" type="date" />
+                </div>
+                <div>
+                  <label data-i18n="lbl_rel_to">Au</label>
+                  <input id="rel_to" type="date" />
+                </div>
+              </div>
+
+              <label style="margin-top:8px;" data-i18n="lbl_rel_period">Journée unique (optionnelle)</label>
+              <input id="rel_period_txt" data-i18n-ph="ph_rel_period" placeholder="Ex. : mardi 26 septembre" />
+            </div>
+          </div>
+
+          <div class="card">
+            <div id="status_rel" class="status small"></div>
+            <div class="divider"></div>
+            <div id="rel_blocks"></div>
+
+            <div class="btns relBtns">
+              <button class="primary iconBtn" id="btn_rel_add" type="button"
+                data-i18n-aria="btn_add_req" aria-label="Ajouter une demande"
+                data-i18n-title="btn_add_req" title="Ajouter une demande">
+                <span aria-hidden="true">＋</span>
+              </button>
+            </div>
+
+            <!-- Liste des technologues -->
+            <datalist id="tech_list">
+				<option value="Andrew Lewyckyj"></option>
+				<option value="Alexander Medina-Pena"></option>
+				<option value="Carl Jacob"></option>
+				<option value="Edward Richer"></option>
+				<option value="Francois Huard"></option>
+				<option value="François-Pierre Aspireault-Massé"></option>
+				<option value="Hugo Langlois"></option>
+				<option value="Jalaludine Ayame"></option>
+				<option value="Jérémie Alexander-Brunelle"></option>
+				<option value="Jonathan Huppé"></option>
+				<option value="Jonathan Tremblay"></option>
+				<option value="Marc Crevier"></option>
+				<option value="Mathieu Sirois"></option>
+				<option value="Michaël Paré"></option>
+				<option value="Philippe Chan Hing Wah"></option>
+				<option value="Philippe Couture"></option>
+				<option value="Rabah Aiboud"></option>
+				<option value="Samuel Robichaud-Gionet"></option>
+				<option value="Sébastien Poirier"></option>
+				<option value="Sébastien Roberto"></option>
+				<option value="Simon Héroux"></option>
+				<option value="Simon Poirier"></option>
+				<option value="Yacine Zabi"></option>
+				<option value="Yannick Mivsek"></option>
+			</datalist>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="card">
+          <label data-i18n="lbl_rel_email">Courriel au TOC</label>
+          <pre id="out_rel"></pre>
+
+          <div class="right-actions">
+            <button class="good" id="btn_copy_rel" type="button" disabled>
+              <span data-i18n="btn_copy_rel">Copier le courriel</span>
+            </button>
+            <span id="copy_hint_rel" class="copy-hint" aria-live="polite"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer corrigé — sans transform -->
+  <footer class="bt-footer">
+    <span id="footer_text">Nav Canada &mdash; Version 1.2 &mdash; 2026-02-01</span>
+    <button class="helpBtn" id="btn_changelog" type="button"
+      data-i18n-title="changelog_btn_title" title="Journal des changements"
+      onclick="showChangelog()">?</button>
+  </footer>
+
+  <!-- Confirm modal -->
+  <div id="confirm_overlay" class="cModalOverlay" hidden></div>
+  <div id="confirm_modal" class="cModal" role="dialog" aria-modal="true"
+    aria-labelledby="confirm_title" aria-describedby="confirm_msg" hidden>
+    <div class="cModalCard">
+      <div class="cModalTitle" id="confirm_title">Confirmation</div>
+      <div class="cModalMsg" id="confirm_msg"></div>
+      <div class="cModalBtns">
+        <button class="btn" id="confirm_cancel" type="button">Annuler</button>
+        <button class="btn danger" id="confirm_ok" type="button"><span aria-hidden="true">🗑️</span> Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Changelog modal -->
+  <div id="changelog_overlay" class="cModalOverlay" hidden></div>
+  <div id="changelog_modal" class="cModal" role="dialog" aria-modal="true"
+    aria-labelledby="changelog_title_el" hidden>
+    <div class="cModalCard">
+      <div class="cModalTitle" id="changelog_title_el" data-i18n="changelog_title">Journal des changements</div>
+      <div id="changelog_content" class="changelogContent"></div>
+      <div class="cModalBtns">
+        <button class="btn" id="changelog_close_btn" type="button" data-i18n="changelog_close">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+
+/* ==========================================================================
+   TRADUCTIONS / TRANSLATIONS
+   ========================================================================== */
+const STRINGS = {
+  fr: {
+    // Tabs
+    tab_bt: "BT correctif",
+    tab_rel_html: "Demande<br>de relâche",
+
+    // Head actions
+    clear_all: "Tout effacer",
+    theme_title: "Thème jour/nuit",
+
+    // BT form
+    lbl_bt_num: "BT du TOC",
+    lbl_site: "Site",
+    lbl_equip: "Équipement",
+    lbl_sympt: "Symptômes",
+    lbl_diag: "Diagnostic",
+    lbl_act: "Actions correctives",
+    lbl_act_plan: "Actions correctives à planifier",
+    chk_photos: "Photo(s)",
+    chk_logs: "Log(s)",
+    chk_plans: "Plan(s)",
+    chk_emails_lbl: "Courriel(s)",
+    lbl_wo: "Bon de travail",
+    btn_copy_bt: "Copier le texte",
+    lbl_toc_email: "Courriel au TOC",
+    btn_copy_toc: "Copier le courriel",
+    chk_close_bt: "Fermer le BT",
+
+    // Rel form
+    lbl_rel_site: "Site / Destination",
+    lbl_rel_from: "Du",
+    lbl_rel_to: "Au",
+    lbl_rel_period: "Journée unique (optionnelle)",
+    ph_rel_site: "Ex. : YZV (Sept-Îles)",
+    ph_rel_period: "Ex. : mardi 26 septembre",
+    lbl_rel_email: "Courriel au TOC",
+    btn_copy_rel: "Copier le courriel",
+
+    // Release block
+    rel_equip: "Équipement",
+    rel_date: "Date",
+    rel_timez: "Heure (Z)",
+    rel_restore: "Délai de remise en service",
+    rel_nature: "Nature",
+    rel_tech: "Technologue(s)",
+    rel_details: "Détails",
+    ph_equip: "Ex. : PAL 135.025 MHz de Québec",
+    ph_timez: "Ex. : 13h00Z à 14h00Z ou 1300-1400",
+    ph_restore: "Ex. : 15 minutes",
+    ph_tech: "Sélectionner ou écrire...",
+    btn_choose: "Choisir",
+    btn_copy_prev: "Copier la demande précédente",
+    btn_add_req: "Ajouter une demande",
+    req_prefix: "Demande",
+
+    // Export
+    btn_export_title: "Exporter .txt",
+
+    // Status
+    status_ready: "Prêt.",
+    status_ready_rel: "Prêt. Ajoute au moins une demande.",
+    status_ok_bt: "Bon de travail à jour ✅",
+    status_cleared: "Effacé.",
+    status_copied_fail: "Copie bloquée. Appuie longtemps/sélectionne et copie.",
+    status_deleted: (n) => `Demande supprimée. (${n} restante${n>1?'s':''})`,
+    status_added: (n) => `Demande #${n} ajoutée.`,
+
+    // Confirm dialogs
+    confirm_clear_bt: "Effacer tous les champs de l'onglet BT correctif ?",
+    confirm_clear_rel: "Effacer tous les champs de l'onglet Demande de relâche ?",
+    confirm_del_req: (n) => `Supprimer la demande #${n} ?`,
+    confirm_ok_clear: "Effacer",
+    confirm_del: "Supprimer",
+    confirm_cancel: "Annuler",
+
+    // Tech popover
+    tech_pop_title: "Technologue(s)",
+    tech_pop_close: "Fermer",
+
+    // Page titles
+    title_bt: "Générateur de BT CM",
+    title_rel: "Demande de relâche",
+
+    // Generated output — BT text
+    out_site: "Site",
+    out_equip: "Équipement",
+    out_bt_prefix: "BT",
+    out_bt_num: "Numéro de BT",
+    out_sympt: "Symptômes:",
+    out_diag: "Diagnostic:",
+    out_act: "Actions correctives:",
+    out_act_plan: "Actions correctives à planifier:",
+    out_photos: "Photo(s) jointe(s) au BT",
+    out_logs: "Log(s) joint(s) au BT",
+    out_plans: "Plan(s) joint(s) au BT",
+    out_emails: "Courriel(s) joint(s) au BT",
+
+    // Generated output — TOC email
+    toc_hello: "Bonjour,",
+    toc_update: (ref) => `Ceci est une mise à jour concernant le ${ref}.`,
+    toc_close_bt: "Le BT peut être fermé.",
+    toc_thanks: "Merci,",
+    toc_ref_fallback: "bon de travail",
+
+    // Generated output — Rel email
+    rel_travel: (site, from, to) => `Je serai à ${site} du ${from} au ${to}.`,
+    rel_travel_period: (site, period) => `Je serai à ${site} ${period}.`,
+    rel_travel_site: (site) => `Je serai à ${site}.`,
+    rel_travel_period_only: (period) => `Je serai sur site ${period}.`,
+    rel_intro: "Voici ma (mes) demande(s) de relâche :",
+    rel_none: "(Aucune demande ajoutée)",
+    rel_hello: "Bonjour,",
+    rel_thanks: "Merci,",
+    rel_out_equip: "Équipement",
+    rel_out_date: "Date",
+    rel_out_timez: "Heure(z)",
+    rel_out_restore: "Délai de remise en service",
+    rel_out_nature: "Nature",
+    rel_out_tech: "Technologue",
+    rel_out_details: "Détails",
+    rel_time_sep: " à ",
+
+    // Footer / changelog
+    changelog_btn_title: "Journal des changements",
+    changelog_title: "Journal des changements",
+    changelog_close: "Fermer",
+
+    // Export filenames
+    export_bt_filename: "bon_de_travail",
+    export_toc_filename: "courriel_TOC",
+    export_rel_filename: "demande_relache",
+
+    // Date locale
+    date_locale: "fr-CA",
+  },
+
+  en: {
+    // Tabs
+    tab_bt: "Corrective WO",
+    tab_rel_html: "Release<br>Request",
+
+    // Head actions
+    clear_all: "Clear All",
+    theme_title: "Light/Dark Theme",
+
+    // BT form
+    lbl_bt_num: "TOC Work Order",
+    lbl_site: "Site",
+    lbl_equip: "Equipment",
+    lbl_sympt: "Symptoms",
+    lbl_diag: "Diagnostic",
+    lbl_act: "Corrective Actions",
+    lbl_act_plan: "Corrective Actions to Plan",
+    chk_photos: "Photo(s)",
+    chk_logs: "Log(s)",
+    chk_plans: "Plan(s)",
+    chk_emails_lbl: "Email(s)",
+    lbl_wo: "Work Order",
+    btn_copy_bt: "Copy Text",
+    lbl_toc_email: "Email to TOC",
+    btn_copy_toc: "Copy Email",
+    chk_close_bt: "Close WO",
+
+    // Rel form
+    lbl_rel_site: "Site / Destination",
+    lbl_rel_from: "From",
+    lbl_rel_to: "To",
+    lbl_rel_period: "Single Day (optional)",
+    ph_rel_site: "E.g.: YZV (Sept-Îles)",
+    ph_rel_period: "E.g.: Tuesday, September 26",
+    lbl_rel_email: "Email to TOC",
+    btn_copy_rel: "Copy Email",
+
+    // Release block
+    rel_equip: "Equipment",
+    rel_date: "Date",
+    rel_timez: "Time (Z)",
+    rel_restore: "Restoration Delay",
+    rel_nature: "Nature",
+    rel_tech: "Technologist(s)",
+    rel_details: "Details",
+    ph_equip: "E.g.: PAL 135.025 MHz Quebec",
+    ph_timez: "E.g.: 13h00Z to 14h00Z or 1300-1400",
+    ph_restore: "E.g.: 15 minutes",
+    ph_tech: "Select or type...",
+    btn_choose: "Choose",
+    btn_copy_prev: "Copy Previous Request",
+    btn_add_req: "Add Request",
+    req_prefix: "Request",
+
+    // Export
+    btn_export_title: "Export .txt",
+
+    // Status
+    status_ready: "Ready.",
+    status_ready_rel: "Ready. Add at least one request.",
+    status_ok_bt: "Work order updated ✅",
+    status_cleared: "Cleared.",
+    status_copied_fail: "Copy blocked. Long-press/select and copy.",
+    status_deleted: (n) => `Request deleted. (${n} remaining)`,
+    status_added: (n) => `Request #${n} added.`,
+
+    // Confirm dialogs
+    confirm_clear_bt: "Clear all fields in the Corrective WO tab?",
+    confirm_clear_rel: "Clear all fields in the Release Request tab?",
+    confirm_del_req: (n) => `Delete request #${n}?`,
+    confirm_ok_clear: "Clear",
+    confirm_del: "Delete",
+    confirm_cancel: "Cancel",
+
+    // Tech popover
+    tech_pop_title: "Technologist(s)",
+    tech_pop_close: "Close",
+
+    // Page titles
+    title_bt: "Corrective WO Generator",
+    title_rel: "Release Request",
+
+    // Generated output — BT text
+    out_site: "Site",
+    out_equip: "Equipment",
+    out_bt_prefix: "WO",
+    out_bt_num: "WO Number",
+    out_sympt: "Symptoms:",
+    out_diag: "Diagnostic:",
+    out_act: "Corrective Actions:",
+    out_act_plan: "Corrective Actions to Plan:",
+    out_photos: "Photo(s) attached to WO",
+    out_logs: "Log(s) attached to WO",
+    out_plans: "Plan(s) attached to WO",
+    out_emails: "Email(s) attached to WO",
+
+    // Generated output — TOC email
+    toc_hello: "Hello,",
+    toc_update: (ref) => `This is an update regarding ${ref}.`,
+    toc_close_bt: "The WO can be closed.",
+    toc_thanks: "Thank you,",
+    toc_ref_fallback: "work order",
+
+    // Generated output — Rel email
+    rel_travel: (site, from, to) => `I will be at ${site} from ${from} to ${to}.`,
+    rel_travel_period: (site, period) => `I will be at ${site} ${period}.`,
+    rel_travel_site: (site) => `I will be at ${site}.`,
+    rel_travel_period_only: (period) => `I will be on site ${period}.`,
+    rel_intro: "Here is/are my release request(s):",
+    rel_none: "(No request added)",
+    rel_hello: "Hello,",
+    rel_thanks: "Thank you,",
+    rel_out_equip: "Equipment",
+    rel_out_date: "Date",
+    rel_out_timez: "Time(z)",
+    rel_out_restore: "Restoration delay",
+    rel_out_nature: "Nature",
+    rel_out_tech: "Technologist",
+    rel_out_details: "Details",
+    rel_time_sep: " to ",
+
+    // Footer / changelog
+    changelog_btn_title: "Change Log",
+    changelog_title: "Change Log",
+    changelog_close: "Close",
+
+    // Export filenames
+    export_bt_filename: "work_order",
+    export_toc_filename: "atc_email",
+    export_rel_filename: "release_request",
+
+    // Date locale
+    date_locale: "en-CA",
+  }
+};
+
+/* Journal des changements */
+const CHANGELOG = [
+  {
+    version: "1.2",
+    date: "2026-02-01",
+    fr: [
+      "Interface bilingue (français / anglais)",
+      "Numéro de version et journal des changements",
+      "Correction du positionnement du pied de page lors du zoom navigateur",
+      "Ligne d'accentuation Nav Canada (rouge) dans l'en-tête",
+    ],
+    en: [
+      "Bilingual interface (French / English)",
+      "Version number and change log",
+      "Fixed footer positioning during browser zoom",
+      "Nav Canada red accent line in header",
+    ]
+  },
+  {
+    version: "1.1",
+    date: "2025-12-01",
+    fr: [
+      "Génération automatique du bon de travail (en temps réel)",
+      "Demandes de relâche multiples avec numérotation automatique",
+      "Sauvegarde automatique dans le navigateur (localStorage)",
+      "Thème jour / nuit avec persistance",
+      "Retour haptique sur mobile",
+    ],
+    en: [
+      "Real-time automatic work order generation",
+      "Multiple release requests with auto-numbering",
+      "Auto-save in browser (localStorage)",
+      "Light/dark theme with persistence",
+      "Haptic feedback on mobile",
+    ]
+  },
+  {
+    version: "1.0",
+    date: "2025-10-01",
+    fr: [
+      "Version initiale",
+      "Générateur de BT correctif",
+      "Générateur de demande de relâche",
+      "Interface adaptée mobile / tablette / bureau",
+    ],
+    en: [
+      "Initial release",
+      "Corrective work order generator",
+      "Release request generator",
+      "Responsive interface (mobile / tablet / desktop)",
+    ]
+  }
+];
+
+/* ==========================================================================
+   MOTEUR DE TRADUCTION
+   ========================================================================== */
+let LANG = 'fr';
+const LANG_KEY = 'ui_lang_navc';
+
+function t(key, ...args) {
+  const val = STRINGS[LANG]?.[key] ?? STRINGS.fr?.[key] ?? key;
+  return typeof val === 'function' ? val(...args) : val;
+}
+
+function applyLang() {
+  // Langue du document HTML
+  document.documentElement.lang = LANG;
+
+  // data-i18n → textContent
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    el.textContent = t(key);
+  });
+
+  // data-i18n-ph → placeholder
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPh);
+  });
+
+  // data-i18n-title → title
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    el.title = t(el.dataset.i18nTitle);
+  });
+
+  // data-i18n-aria → aria-label
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    el.setAttribute('aria-label', t(el.dataset.i18nAria));
+  });
+
+  // Tab relâche (innerHTML pour le saut de ligne)
+  const tabRelText = document.getElementById('tab_rel_text');
+  if (tabRelText) tabRelText.innerHTML = t('tab_rel_html');
+
+  // Bouton langue (affiche le code de la langue CIBLE)
+  const langIcon = document.getElementById('lang_icon');
+  if (langIcon) langIcon.textContent = LANG === 'fr' ? 'EN' : 'FR';
+
+  // Titre de la page
+  const isBT = document.getElementById('tab_bt')?.classList.contains('active');
+  document.title = t(isBT ? 'title_bt' : 'title_rel');
+
+  // Regenerate outputs avec la nouvelle langue
+  try { generateBT({ silent: true }); } catch(_e) {}
+  try { generateRel(); } catch(_e) {}
+  // Met à jour les textes dynamiques dans les blocs de relâche
+  try { renumberReleaseBlocks(); } catch(_e) {}
+
+  // Sauvegarde préférence langue
+  try { localStorage.setItem(LANG_KEY, LANG); } catch(_e) {}
+}
+
+function toggleLang() {
+  LANG = (LANG === 'fr') ? 'en' : 'fr';
+  // Animation flash subtile
+  document.querySelector('.wrap')?.classList.add('lang-transitioning');
+  setTimeout(() => document.querySelector('.wrap')?.classList.remove('lang-transitioning'), 260);
+  applyLang();
+}
+
+function initLang() {
+  let saved = null;
+  try { saved = localStorage.getItem(LANG_KEY); } catch(_e) {}
+  LANG = (saved === 'en') ? 'en' : 'fr';
+  // Applique seulement l'icône et le lang attr, sans regénérer (pas encore de données)
+  document.documentElement.lang = LANG;
+  const langIcon = document.getElementById('lang_icon');
+  if (langIcon) langIcon.textContent = LANG === 'fr' ? 'EN' : 'FR';
+}
+
+/* ==========================================================================
+   CHANGELOG MODAL
+   ========================================================================== */
+function showChangelog() {
+  const ov = document.getElementById('changelog_overlay');
+  const md = document.getElementById('changelog_modal');
+  const content = document.getElementById('changelog_content');
+  if (!ov || !md || !content) return;
+
+  // Met à jour le titre et le bouton selon la langue
+  const titleEl = document.getElementById('changelog_title_el');
+  if (titleEl) titleEl.textContent = t('changelog_title');
+  const closeBtn = document.getElementById('changelog_close_btn');
+  if (closeBtn) closeBtn.textContent = t('changelog_close');
+
+  // Construit le contenu
+  const html = CHANGELOG.map(entry => {
+    const changes = entry[LANG] || entry.fr;
+    const items = changes.map(c => `<li>${c}</li>`).join('');
+    return `<div class="cl-entry">
+      <div class="cl-version">v${entry.version}<span class="cl-date">${entry.date}</span></div>
+      <ul class="cl-list">${items}</ul>
+    </div>`;
+  }).join('');
+  content.innerHTML = html;
+
+  ov.hidden = false;
+  md.hidden = false;
+
+  // Fermeture
+  let settled = false;
+  const close = () => {
+    if (settled) return;
+    settled = true;
+    ov.hidden = true;
+    md.hidden = true;
+    if (closeBtn) closeBtn.removeEventListener('click', close);
+    ov.removeEventListener('click', close);
+    document.removeEventListener('keydown', onKey);
+  };
+  const onKey = (e) => { if (e.key === 'Escape') close(); };
+
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  ov.addEventListener('click', close);
+  document.addEventListener('keydown', onKey);
+
+  setTimeout(() => { try { closeBtn?.focus(); } catch(_e) {} }, 0);
+}
+
+/* ==========================================================================
+   HELPERS
+   ========================================================================== */
+const $ = (id) => document.getElementById(id);
+
+function setStatus(elId, msg, kind="small") {
+  const el = $(elId);
+  if (!el) return;
+  const hasMsg = !!(msg && String(msg).trim().length);
+  if (!hasMsg) { el.textContent = ""; el.className = "status"; el.style.display = "none"; return; }
+  el.style.display = "";
+  el.className = "status " + kind;
+  el.textContent = msg;
+}
+
+function cleanText(s) {
+  if (!s) return "";
+  s = s.replace(/\r\n/g, "\n");
+  s = s.replace(/[ \t]+/g, " ");
+  s = s.replace(/\n{3,}/g, "\n\n");
+  return s.trim();
+}
+
+function normalizeNameList(s){
+  s = cleanText(s);
+  if (!s) return "";
+  s = s.replace(/[\r\n]+/g, ", ");
+  s = s.replace(/[;|\/]+/g, ", ");
+  const parts = s.split(",").map(x => x.trim()).filter(Boolean);
+  return parts.join(", ");
+}
+
+function formatBlock(text) {
+  text = cleanText(text);
+  return text ? text : "-";
+}
+
+/* Clipboard (robuste mobile/local) */
+function fallbackCopyText(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.setAttribute("readonly", "");
+  ta.style.cssText = "position:fixed;top:-9999px;left:-9999px;";
+  document.body.appendChild(ta);
+  ta.select();
+  ta.setSelectionRange(0, ta.value.length);
+  let ok = false;
+  try { ok = document.execCommand("copy"); } catch(_e) {}
+  document.body.removeChild(ta);
+  return ok;
+}
+
+async function copySmart(text, onOk, onFail) {
+  text = text || "";
+  if (!text.trim()) return;
+  try {
+    await navigator.clipboard.writeText(text);
+    onOk?.();
+  } catch(_e) {
+    const ok = fallbackCopyText(text);
+    if (ok) onOk?.();
+    else onFail?.();
+  }
+}
+
+function hint(id) {
+  let t_timer = null;
+  return function show(){
+    const el = $(id);
+    if (!el) return;
+    el.textContent = "Copié ✅";
+    el.classList.add("show");
+    if (t_timer) clearTimeout(t_timer);
+    t_timer = setTimeout(() => { el.classList.remove("show"); el.textContent=""; }, 1800);
+  };
+}
+
+const showCopyBT  = hint("copy_hint");
+const showCopyTOC = hint("copy_hint_toc");
+const showCopyREL = () => {};
+
+/* Export .txt */
+function exportTxt(text, baseFilename) {
+  if (!text || !text.trim()) return;
+  const date = new Date().toISOString().slice(0, 10);
+  const filename = `${baseFilename}_${date}.txt`;
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ==========================================================================
+   TABS
+   ========================================================================== */
+function setTab(active) {
+  const bt    = $("tab_bt");
+  const rel   = $("tab_rel");
+  const viewBT  = $("view_bt");
+  const viewREL = $("view_rel");
+
+  if (active === "bt") {
+    bt.classList.add("active");
+    rel.classList.remove("active");
+    viewBT.classList.remove("hidden");
+    viewREL.classList.add("hidden");
+    document.title = t('title_bt');
+  } else {
+    rel.classList.add("active");
+    bt.classList.remove("active");
+    viewREL.classList.remove("hidden");
+    viewBT.classList.add("hidden");
+    document.title = t('title_rel');
+  }
+}
+
+/* ==========================================================================
+   BT CORRECTIF
+   ========================================================================== */
+function getBTData() {
+  return {
+    site:  cleanText($("site").value),
+    equip: cleanText($("equip").value),
+    bt:    cleanText($("bt").value),
+    sympt: cleanText($("sympt").value),
+    diag:  cleanText($("diag").value),
+    act:   cleanText($("act").value),
+    act_plan: cleanText($("act_plan").value),
+    photos: $("chk_photos").checked,
+    logs:   $("chk_logs").checked,
+    plans:  $("chk_plans").checked,
+    emails: ($("chk_emails") ? $("chk_emails").checked : false),
+    close_bt: $("chk_close_bt") ? $("chk_close_bt").checked : false
+  };
+}
+
+function buildBTText(d) {
+  const headerParts = [];
+  if (d.site)  headerParts.push(`${t('out_site')}: ${d.site}`);
+  if (d.equip) headerParts.push(`${t('out_equip')}: ${d.equip}`);
+  if (d.bt)    headerParts.push(`${t('out_bt_num')}: ${d.bt}`);
+  const header = headerParts.length ? headerParts.join(" | ") + "\n\n" : "";
+
+  const out = [];
+  out.push(t('out_sympt'));
+  out.push(formatBlock(d.sympt));
+  out.push("");
+  out.push(t('out_diag'));
+  out.push(formatBlock(d.diag));
+  out.push("");
+  out.push(t('out_act'));
+  out.push(formatBlock(d.act));
+  out.push("");
+  out.push(t('out_act_plan'));
+  out.push(formatBlock(d.act_plan));
+
+  if (d.photos || d.logs || d.plans || d.emails) out.push("");
+  if (d.photos) out.push(t('out_photos'));
+  if (d.logs)   out.push(t('out_logs'));
+  if (d.plans)  out.push(t('out_plans'));
+  if (d.emails) out.push(t('out_emails'));
+
+  return header + out.join("\n");
+}
+
+function buildTOCEmail(d, btText) {
+  const btRef    = d.bt    ? d.bt    : "";
+  const siteRef  = d.site  ? d.site  : "";
+  const equipRef = d.equip ? d.equip : "";
+
+  const headerParts = [];
+  if (btRef)    headerParts.push(`${t('out_bt_prefix')} ${btRef}`);
+  if (siteRef)  headerParts.push(siteRef);
+  if (equipRef) headerParts.push(equipRef);
+  const refLine = headerParts.length ? headerParts.join(" — ") : t('toc_ref_fallback');
+
+  // Corps BT (sans l'entête "Site: ... | ...")
+  let btBody = (btText || "").trim();
+  if (btBody) {
+    const parts = btBody.split("\n\n");
+    if (parts.length >= 2) {
+      const first = parts[0];
+      if (/\bSite:\s*|\bÉquipement:\s*|\bEquipement:\s*|\bEquipment:\s*|\bNuméro de BT:\s*|\bWO Number:\s*/i.test(first)) {
+        btBody = parts.slice(1).join("\n\n").trim();
+      }
+    }
+  }
+
+  // Extrait les sections du corps du BT
+  function extractSection(text, title) {
+    const lines = (text || "").split("\n");
+    // Tous les entêtes possibles (FR + EN) pour stopper l'extraction
+    const headers = [
+      "Symptômes:", "Symptomes:", "Symptoms:",
+      "Diagnostic:",
+      "Actions correctives:", "Actions correctives à planifier:",
+      "Corrective Actions:", "Corrective Actions to Plan:",
+      "Photo(s) jointe(s) au BT", "Log(s) joint(s) au BT",
+      "Plan(s) joint(s) au BT", "Courriel(s) joint(s) au BT",
+      "Photo(s) attached to WO", "Log(s) attached to WO",
+      "Plan(s) attached to WO", "Email(s) attached to WO"
+    ];
+
+    const esc = (x) => String(x).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const isHeader = (ln) => headers.some(h => new RegExp("^\\s*" + esc(h) + "\\s*$", "i").test(ln));
+    const titleRe = new RegExp("^\\s*" + esc(title) + "\\s*$", "i");
+
+    let startIdx = -1;
+    for (let i = 0; i < lines.length; i++) {
+      if (titleRe.test(lines[i])) { startIdx = i; break; }
+    }
+    if (startIdx === -1) return `${title}\n-`;
+
+    const out2 = [title];
+    for (let i = startIdx + 1; i < lines.length; i++) {
+      if (isHeader(lines[i])) break;
+      out2.push(lines[i]);
+    }
+    let outTxt = out2.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+    if (outTxt === title) outTxt = `${title}\n-`;
+    return outTxt;
+  }
+
+  const diagOnly = extractSection(btBody, t('out_diag'));
+  const actOnly  = extractSection(btBody, t('out_act'));
+
+  const lines = [];
+  lines.push(t('toc_hello'));
+  lines.push("");
+  lines.push(t('toc_update', refLine));
+  lines.push("");
+  lines.push(diagOnly);
+  lines.push("");
+  lines.push(actOnly);
+
+  if (d.close_bt) {
+    lines.push("");
+    lines.push(t('toc_close_bt'));
+  }
+  lines.push("");
+  lines.push(t('toc_thanks'));
+  lines.push("");
+
+  return lines.join("\n");
+}
+
+function hasAnyBTInput(d){
+  return !!(d.site || d.equip || d.bt || d.sympt || d.diag || d.act || d.act_plan ||
+            d.photos || d.logs || d.plans || d.emails || d.close_bt);
+}
+
+function generateBT(opts = {}) {
+  const d = getBTData();
+  const active = hasAnyBTInput(d);
+
+  if (!active){
+    $("out_txt").textContent = "";
+    $("out_toc").textContent = "";
+    const _bcr=$("btn_copy_right"); if(_bcr) _bcr.disabled = true;
+    const _bct=$("btn_copy_toc");   if(_bct) _bct.disabled = true;
+    $("copy_hint").classList.remove("show"); $("copy_hint").textContent = "";
+    $("copy_hint_toc").classList.remove("show"); $("copy_hint_toc").textContent = "";
+    return;
+  }
+
+  const btTxt  = buildBTText(d);
+  const tocTxt = buildTOCEmail(d, btTxt);
+
+  $("out_txt").textContent = btTxt;
+  $("out_toc").textContent = tocTxt;
+
+  $("btn_copy_right").disabled = !btTxt.trim();
+  $("btn_copy_toc").disabled   = !tocTxt.trim();
+
+  $("copy_hint").classList.remove("show"); $("copy_hint").textContent = "";
+  $("copy_hint_toc").classList.remove("show"); $("copy_hint_toc").textContent = "";
+
+  if (!opts.silent) setStatus("status", t('status_ok_bt'), "ok");
+}
+
+async function copyBT() {
+  await copySmart($("out_txt").textContent, showCopyBT,
+    () => setStatus("status", t('status_copied_fail'), "warn"));
+}
+async function copyTOC() {
+  await copySmart($("out_toc").textContent, showCopyTOC,
+    () => setStatus("status", t('status_copied_fail'), "warn"));
+}
+
+function clearBT() {
+  ["site","equip","bt","sympt","diag","act","act_plan"].forEach(id => { const el=$(id); if(el) el.value=""; });
+  ["chk_photos","chk_logs","chk_plans","chk_emails","chk_close_bt"].forEach(id => {
+    const el=$(id); if(el) el.checked=false;
+  });
+  $("out_txt").textContent = "";
+  $("out_toc").textContent = "";
+  const _bcr=$("btn_copy_right"); if(_bcr) _bcr.disabled = true;
+  const _bct=$("btn_copy_toc");   if(_bct) _bct.disabled = true;
+  $("copy_hint").classList.remove("show"); $("copy_hint").textContent = "";
+  $("copy_hint_toc").classList.remove("show"); $("copy_hint_toc").textContent = "";
+  setStatus("status", t('status_cleared'), "small");
+}
+
+async function confirmClearActive(){
+  const isBT = $("tab_bt") && $("tab_bt").classList.contains("active");
+  if (isBT){
+    const ok = await confirmThemed(t('confirm_clear_bt'), { okText: t('confirm_ok_clear'), okIcon: "🗑️" });
+    if (!ok) return;
+    try { clearBT(); } catch(_e) {}
+  } else {
+    const ok = await confirmThemed(t('confirm_clear_rel'), { okText: t('confirm_ok_clear'), okIcon: "🗑️" });
+    if (!ok) return;
+    try { clearRel(); } catch(_e) {}
+  }
+  try { autosaveNow(); } catch(_e) {}
+}
+
+const _clearTop = $("btn_clear_top");
+if (_clearTop) _clearTop.addEventListener("click", confirmClearActive);
+
+// Auto-génération BT
+let __btRaf = 0;
+function autoGenerateBT(){
+  if (__btRaf) return;
+  __btRaf = requestAnimationFrame(() => { __btRaf = 0; generateBT({ silent:true }); });
+}
+["bt","site","equip","sympt","diag","act","act_plan","chk_photos","chk_logs","chk_plans","chk_emails","chk_close_bt"].forEach(id => {
+  const el = $(id);
+  if (!el) return;
+  el.addEventListener("input", autoGenerateBT);
+  el.addEventListener("change", autoGenerateBT);
+});
+
+$("btn_copy_right").addEventListener("click", copyBT);
+$("btn_copy_toc").addEventListener("click", copyTOC);
+
+/* ==========================================================================
+   RELÂCHE
+   ========================================================================== */
+let releaseCount = 0;
+
+function formatHumanDate(iso) {
+  if (!iso) return "";
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso;
+  const [y, m, d] = iso.split("-").map(Number);
+  const dt = new Date(y, m - 1, d);
+  if (Number.isNaN(dt.getTime())) return iso;
+  const locale = t('date_locale');
+  const opts = LANG === 'fr'
+    ? { weekday:"long", day:"numeric", month:"long", year:"numeric" }
+    : { weekday:"long", month:"long", day:"numeric", year:"numeric" };
+  return new Intl.DateTimeFormat(locale, opts).format(dt);
+}
+
+function buildTravelLine() {
+  const site      = cleanText($("rel_site").value);
+  const fromIso   = ($("rel_from").value || "").trim();
+  const toIso     = ($("rel_to").value   || "").trim();
+  const periodTxt = cleanText($("rel_period_txt").value);
+  const from = formatHumanDate(fromIso);
+  const to   = formatHumanDate(toIso);
+
+  if (site && from && to) return t('rel_travel', site, from, to);
+  if (site && periodTxt)  return t('rel_travel_period', site, periodTxt);
+  if (site)               return t('rel_travel_site', site);
+  if (periodTxt)          return t('rel_travel_period_only', periodTxt);
+  return "";
+}
+
+function renumberReleaseBlocks() {
+  const blocks = Array.from($("rel_blocks").querySelectorAll(".release-block"));
+  blocks.forEach((b, idx) => {
+    const n = idx + 1;
+    const titleEl = b.querySelector(".release-title");
+    if (titleEl) titleEl.textContent = `${t('req_prefix')} #${n}`;
+
+    const copyBtn = b.querySelector(".release-copy");
+    if (copyBtn) {
+      const isFirst = idx === 0;
+      copyBtn.disabled = isFirst;
+      copyBtn.style.opacity = isFirst ? "0.5" : "1";
+      // Mise à jour du texte du bouton
+      copyBtn.textContent = t('btn_copy_prev');
+    }
+  });
+}
+
+function makeReleaseBlock() {
+  const wrap = document.createElement("div");
+  wrap.className = "release-block";
+
+  wrap.innerHTML = `
+    <div class="release-head">
+      <div class="release-title">${t('req_prefix')}</div>
+      <div class="release-actions">
+        <button class="release-copy" type="button">${t('btn_copy_prev')}</button>
+        <button class="release-del iconBtn" type="button"
+          aria-label="${t('req_prefix')}"
+          title="${t('confirm_del')}"><span aria-hidden="true">🗑️</span></button>
+      </div>
+    </div>
+
+    <div class="rel-pair">
+      <div>
+        <label class="lbl-top-center" data-i18n="rel_equip">${t('rel_equip')}</label>
+        <input data-k="equip" data-i18n-ph="ph_equip" placeholder="${t('ph_equip')}" />
+      </div>
+      <div>
+        <label class="lbl-top-center" data-i18n="rel_date">${t('rel_date')}</label>
+        <input data-k="date" type="date" />
+      </div>
+    </div>
+
+    <div class="rel-pair">
+      <div>
+        <label class="lbl-top-center" data-i18n="rel_timez">${t('rel_timez')}</label>
+        <input data-k="timez" data-i18n-ph="ph_timez" placeholder="${t('ph_timez')}" />
+      </div>
+      <div>
+        <label class="lbl-top-center" data-i18n="rel_restore">${t('rel_restore')}</label>
+        <input data-k="restore" data-i18n-ph="ph_restore" placeholder="${t('ph_restore')}" />
+      </div>
+    </div>
+
+    <div class="rel-pair">
+      <div>
+        <label class="lbl-top-center" data-i18n="rel_nature">${t('rel_nature')}</label>
+        <div class="checks center" style="margin-top:0;">
+          <div class="inline"><input type="checkbox" data-k="nat_pm"><label style="margin:0;color:var(--ink);font-size:13px;">PM</label></div>
+          <div class="inline"><input type="checkbox" data-k="nat_cm"><label style="margin:0;color:var(--ink);font-size:13px;">CM</label></div>
+          <div class="inline"><input type="checkbox" data-k="nat_fm"><label style="margin:0;color:var(--ink);font-size:13px;">FM</label></div>
+          <div class="inline"><input type="checkbox" data-k="nat_pop"><label style="margin:0;color:var(--ink);font-size:13px;">POP</label></div>
+        </div>
+      </div>
+      <div>
+        <label class="lbl-top-center" data-i18n="rel_tech">${t('rel_tech')}</label>
+        <div class="tech-row">
+          <input data-k="tech" data-i18n-ph="ph_tech" placeholder="${t('ph_tech')}" />
+          <button class="tech-pick" type="button" data-i18n="btn_choose">${t('btn_choose')}</button>
+        </div>
+      </div>
+    </div>
+
+    <label data-i18n="rel_details">${t('rel_details')}</label>
+    <textarea data-k="details"></textarea>
+  `;
+
+  wrap.addEventListener("input", () => generateRel());
+
+  const techInput = wrap.querySelector('[data-k="tech"]');
+  const techBtn   = wrap.querySelector('.tech-pick');
+  if (techBtn && techInput){
+    techBtn.addEventListener('click', () => openTechPop(techBtn, techInput));
+  }
+
+  const copyBtn = wrap.querySelector(".release-copy");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", () => {
+      const prev = wrap.previousElementSibling;
+      if (!prev || !prev.classList.contains("release-block")) return;
+      const keys = ["equip","date","timez","restore","nat_pm","nat_cm","nat_fm","nat_pop","tech","details"];
+      for (const k of keys) {
+        const prevEl = prev.querySelector(`[data-k="${k}"]`);
+        const curEl  = wrap.querySelector(`[data-k="${k}"]`);
+        if (prevEl && curEl) {
+          if (curEl.type === "checkbox") curEl.checked = !!prevEl.checked;
+          else curEl.value = prevEl.value || "";
+        }
+      }
+      generateRel();
+    });
+  }
+
+  const delBtn = wrap.querySelector(".release-del");
+  if (delBtn){
+    delBtn.addEventListener("click", async () => {
+      const blocks = Array.from($("rel_blocks").querySelectorAll(".release-block"));
+      const idx = blocks.indexOf(wrap);
+      const n = (idx >= 0 ? (idx + 1) : "?");
+      const ok = await confirmThemed(t('confirm_del_req', n), { okText: t('confirm_del'), okIcon: "🗑️" });
+      if (!ok) return;
+      wrap.remove();
+      const remain = $("rel_blocks").querySelectorAll(".release-block").length;
+      if (remain === 0) $("rel_blocks").appendChild(makeReleaseBlock());
+      renumberReleaseBlocks();
+      generateRel();
+      const countNow = $("rel_blocks").querySelectorAll(".release-block").length;
+      setStatus("status_rel", t('status_deleted', countNow), "small");
+      try { autosaveNow(); } catch(_e) {}
+    });
+  }
+
+  return wrap;
+}
+
+function addReleaseBlock() {
+  releaseCount += 1;
+  $("rel_blocks").appendChild(makeReleaseBlock());
+  renumberReleaseBlocks();
+  const count = $("rel_blocks").querySelectorAll(".release-block").length;
+  setStatus("status_rel", t('status_added', count), "small");
+}
+
+function getReleaseBlocks() {
+  const blocks = Array.from($("rel_blocks").querySelectorAll(".release-block"));
+  return blocks.map(b => {
+    const get = (k) => cleanText((b.querySelector(`[data-k="${k}"]`) || {}).value || "");
+    return {
+      equip: get("equip"),
+      date:  get("date"),
+      timez: get("timez"),
+      restore: get("restore"),
+      nature: (() => {
+        const picks = [];
+        if ((b.querySelector('[data-k="nat_pm"]')  || {}).checked) picks.push("PM");
+        if ((b.querySelector('[data-k="nat_cm"]')  || {}).checked) picks.push("CM");
+        if ((b.querySelector('[data-k="nat_fm"]')  || {}).checked) picks.push("FM");
+        if ((b.querySelector('[data-k="nat_pop"]') || {}).checked) picks.push("POP");
+        return picks;
+      })(),
+      tech:    get("tech"),
+      details: get("details")
+    };
+  });
+}
+
+function formatTimeTokenZ(tok){
+  tok = (tok || "").trim();
+  if (!/^\d{3,4}$/.test(tok)) return "";
+  const padded = tok.padStart(4, "0");
+  const hh = parseInt(padded.slice(0, 2), 10);
+  const mm = parseInt(padded.slice(2), 10);
+  if (Number.isNaN(hh) || Number.isNaN(mm) || hh < 0 || hh > 23 || mm < 0 || mm > 59) return "";
+  return `${String(hh).padStart(2,'0')}h${String(mm).padStart(2,'0')}Z`;
+}
+
+function normalizeTimeZ(s){
+  s = cleanText(s);
+  if (!s) return "";
+  const direct = formatTimeTokenZ(s);
+  if (direct) return direct;
+  const out = s.replace(/\b(\d{3,4})\b/g, (m, p1) => {
+    const tok = formatTimeTokenZ(p1);
+    return tok || m;
+  });
+  const sep = t('rel_time_sep');
+  return out.replace(/(\d{2}h\d{2}Z)\s*[-–—]\s*(\d{2}h\d{2}Z)/g, `$1${sep}$2`);
+}
+
+/* ===========================
+   Technologue(s) multi-pick
+   =========================== */
+let __techPop = null;
+let __techPopCloseHandler = null;
+
+function splitTechNames(s){
+  s = cleanText(s);
+  if (!s) return [];
+  const parts = s.replace(/[\n\r]+/g, ",").replace(/[;\/|]+/g, ",")
+    .split(",").map(x => x.trim()).filter(Boolean);
+  const out = [];
+  const seen = new Set();
+  for (const p of parts){
+    const k = p.toLowerCase();
+    if (!seen.has(k)){ seen.add(k); out.push(p); }
+  }
+  return out;
+}
+
+function normalizeTechNames(s){ return splitTechNames(s).join(", "); }
+
+function addTechName(inputEl, name){
+  if (!inputEl) return;
+  name = cleanText(name);
+  if (!name) return;
+  const names = splitTechNames(inputEl.value);
+  const exists = names.some(n => n.toLowerCase() === name.toLowerCase());
+  if (!exists) names.push(name);
+  inputEl.value = names.join(", ");
+  inputEl.dispatchEvent(new Event("input", { bubbles:true }));
+  inputEl.focus();
+  try{ inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length); }catch(_e){}
+}
+
+function closeTechPop(){
+  if (__techPop){ __techPop.remove(); __techPop = null; }
+  if (__techPopCloseHandler){
+    document.removeEventListener("mousedown", __techPopCloseHandler, true);
+    __techPopCloseHandler = null;
+  }
+}
+
+function openTechPop(anchorBtn, inputEl){
+  closeTechPop();
+  const pop = document.createElement("div");
+  pop.className = "tech-pop";
+
+  const head = document.createElement("div");
+  head.className = "tech-pop-head";
+  head.innerHTML = `<div class="tech-pop-title">${t('tech_pop_title')}</div><button class="tech-close" type="button">${t('tech_pop_close')}</button>`;
+  pop.appendChild(head);
+  head.querySelector(".tech-close").addEventListener("click", closeTechPop);
+
+  const opts = Array.from(document.querySelectorAll("#tech_list option")).map(o => cleanText(o.value)).filter(Boolean);
+  const current = new Set(splitTechNames(inputEl?.value).map(x => x.toLowerCase()));
+
+  opts.forEach(name => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "tech-item" + (current.has(name.toLowerCase()) ? " sel" : "");
+    b.textContent = name;
+    b.addEventListener("click", () => { addTechName(inputEl, name); b.classList.add("sel"); });
+    pop.appendChild(b);
+  });
+
+  document.body.appendChild(pop);
+  __techPop = pop;
+
+  const r = anchorBtn.getBoundingClientRect();
+  const pad = 8;
+  let left = r.left;
+  let top  = r.bottom + 8;
+  const popRect = pop.getBoundingClientRect();
+  if (left + popRect.width  > window.innerWidth  - pad) left = Math.max(pad, window.innerWidth  - pad - popRect.width);
+  if (top  + popRect.height > window.innerHeight - pad) top  = Math.max(pad, r.top - 8 - popRect.height);
+  pop.style.left = left + "px";
+  pop.style.top  = top  + "px";
+
+  __techPopCloseHandler = (ev) => {
+    if (!__techPop) return;
+    if (__techPop.contains(ev.target) || anchorBtn.contains(ev.target)) return;
+    closeTechPop();
+  };
+  document.addEventListener("mousedown", __techPopCloseHandler, true);
+}
+
+function formatReleaseEmail() {
+  const travelLine = buildTravelLine();
+
+  const blocks = getReleaseBlocks().filter(b =>
+    b.equip || b.date || b.timez || b.restore || (Array.isArray(b.nature) && b.nature.length) || b.tech || b.details
+  );
+
+  const lines = [];
+  lines.push(t('rel_hello'));
+  lines.push("");
+  if (travelLine) lines.push(travelLine);
+  lines.push(t('rel_intro'));
+  lines.push("");
+
+  if (blocks.length === 0) {
+    lines.push(t('rel_none'));
+    return lines.join("\n");
+  }
+
+  blocks.forEach((b, idx) => {
+    const dateHuman = formatHumanDate(b.date);
+    lines.push(`${t('rel_out_equip')}: ${b.equip || "-"}`);
+    lines.push(`${t('rel_out_date')} : ${dateHuman || "-"}`);
+    lines.push(`${t('rel_out_timez')} : ${normalizeTimeZ(b.timez) || "-"}`);
+    lines.push(`${t('rel_out_restore')} : ${b.restore || "-"}`);
+    lines.push(`${t('rel_out_nature')} : ${(Array.isArray(b.nature) && b.nature.length) ? b.nature.join(" / ") : "-"}`);
+    lines.push(`${t('rel_out_tech')} : ${normalizeNameList(b.tech) || "-"}`);
+    lines.push(`${t('rel_out_details')}: ${b.details ? b.details.replace(/\n+/g, " ") : "n/a"}`);
+    if (idx !== blocks.length - 1) lines.push("");
+  });
+
+  lines.push("");
+  lines.push(t('rel_thanks'));
+  lines.push("");
+
+  return lines.join("\n");
+}
+
+function generateRel() {
+  const txt = formatReleaseEmail();
+  $("out_rel").textContent = txt;
+  const has = !!txt.trim() && !txt.includes(t('rel_none'));
+  $("btn_copy_rel").disabled  = !has;
+  $("copy_hint_rel").classList.remove("show");
+  $("copy_hint_rel").textContent = "";
+  setStatus("status_rel", "");
+}
+
+async function copyRel() {
+  await copySmart($("out_rel").textContent, showCopyREL,
+    () => setStatus("status_rel", t('status_copied_fail'), "warn"));
+}
+
+function clearRel() {
+  $("rel_site").value = "";
+  $("rel_from").value = "";
+  $("rel_to").value   = "";
+  $("rel_period_txt").value = "";
+  $("rel_blocks").innerHTML = "";
+  $("out_rel").textContent  = "";
+  const _brel=$("btn_copy_rel");  if(_brel)  _brel.disabled  = true;
+  $("copy_hint_rel").classList.remove("show");
+  $("copy_hint_rel").textContent = "";
+  setStatus("status_rel", t('status_cleared'), "small");
+  addReleaseBlock();
+}
+
+async function removeLastReleaseBlock() {
+  const blocks = Array.from($("rel_blocks").querySelectorAll(".release-block"));
+  if (blocks.length === 0) return;
+  const _ok = await confirmThemed(LANG === 'fr' ? "Supprimer la dernière demande de relâche ?" : "Delete the last release request?");
+  if (!_ok) return;
+  blocks[blocks.length - 1].remove();
+  renumberReleaseBlocks();
+  generateRel();
+  const count = $("rel_blocks").querySelectorAll(".release-block").length;
+  setStatus("status_rel", count ? t('status_added', count) : (LANG === 'fr' ? "Aucune demande." : "No requests."), "small");
+}
+
+$("btn_rel_add").addEventListener("click", addReleaseBlock);
+const _brm = $("btn_rel_remove"); if (_brm) _brm.addEventListener("click", removeLastReleaseBlock);
+$("btn_copy_rel").addEventListener("click", copyRel);
+
+["rel_site","rel_from","rel_to","rel_period_txt"].forEach(id => {
+  const el = $(id);
+  if (el) el.addEventListener("input", () => generateRel());
+});
+
+/* ==========================================================================
+   CONFIRM MODAL (thémé)
+   ========================================================================== */
+function confirmThemed(message, opts){
+  return new Promise((resolve) => {
+    const ov       = document.getElementById("confirm_overlay");
+    const md       = document.getElementById("confirm_modal");
+    const msg      = document.getElementById("confirm_msg");
+    const btnOk    = document.getElementById("confirm_ok");
+    const btnCancel = document.getElementById("confirm_cancel");
+
+    if (!ov || !md || !msg || !btnOk || !btnCancel){
+      try { resolve(window.confirm(message)); } catch(_e){ resolve(false); }
+      return;
+    }
+
+    const defaultOkHTML    = btnOk.innerHTML;
+    const defaultCancelTxt = btnCancel.textContent;
+
+    // Mise à jour du texte "Annuler" selon la langue
+    btnCancel.textContent = t('confirm_cancel');
+
+    try {
+      if (opts && typeof opts === "object"){
+        const okText   = (opts.okText  || "").trim();
+        const cancelTxt = (opts.cancelText || "").trim();
+        const okIcon   = (opts.okIcon  || "").trim();
+        if (okText) btnOk.innerHTML = okText.includes("<") ? okText : (okIcon ? `<span aria-hidden="true">${okIcon}</span> ${okText}` : okText);
+        if (cancelTxt) btnCancel.textContent = cancelTxt;
+      } else if (typeof opts === "string" && opts.trim()){
+        btnOk.innerHTML = opts.trim();
+      }
+    } catch(_e) {}
+
+    let settled = false;
+    const close = (val) => {
+      if (settled) return;
+      settled = true;
+      ov.hidden = true;
+      md.hidden = true;
+      try{ btnOk.innerHTML = defaultOkHTML; }catch(_e){}
+      try{ btnCancel.textContent = defaultCancelTxt; }catch(_e){}
+      btnOk.removeEventListener("click", onOk);
+      btnCancel.removeEventListener("click", onCancel);
+      ov.removeEventListener("click", onCancel);
+      document.removeEventListener("keydown", onKey);
+      resolve(val);
+    };
+
+    const onOk     = () => close(true);
+    const onCancel = () => close(false);
+    const onKey    = (e) => {
+      if (e.key === "Escape") return close(false);
+      if (e.key === "Enter")  return close(true);
+    };
+
+    msg.textContent = message || "";
+    ov.hidden = false;
+    md.hidden = false;
+    setTimeout(() => { try { btnCancel.focus(); } catch(_e){} }, 0);
+
+    btnOk.addEventListener("click", onOk, { once:false });
+    btnCancel.addEventListener("click", onCancel, { once:false });
+    ov.addEventListener("click", onCancel, { once:false });
+    document.addEventListener("keydown", onKey);
+  });
+}
+
+/* ==========================================================================
+   STATE — Auto-save (localStorage)
+   ========================================================================== */
+const APP_VERSION   = "v3.3.4";
+const AUTOSAVE_KEY  = `CNSYQB_Generateur_BT_Relache_autosave_${APP_VERSION}`;
+const LEGACY_AUTOSAVE_KEYS = ["CNSYQB_Generateur_BT_Relache_autosave_v3_3_4"];
+let __saveTimer = null;
+
+function autosaveNow(){
+  try { localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(collectState())); } catch(_e) {}
+}
+function autosaveDebounced(){
+  if (__saveTimer) clearTimeout(__saveTimer);
+  __saveTimer = setTimeout(autosaveNow, 350);
+}
+
+document.addEventListener("input",  () => autosaveDebounced(), true);
+document.addEventListener("change", () => autosaveDebounced(), true);
+
+function collectState(){
+  return {
+    meta: { tool:"CNSYQB_Generateur_BT_Relache", version:APP_VERSION, savedAt:new Date().toISOString() },
+    bt: {
+      bt:     $("bt").value    || "",
+      site:   $("site").value  || "",
+      equip:  $("equip").value || "",
+      sympt:  $("sympt").value || "",
+      diag:   $("diag").value  || "",
+      act:    $("act").value   || "",
+      act_plan: $("act_plan").value || "",
+      chk_photos: $("chk_photos").checked,
+      chk_logs:   $("chk_logs").checked,
+      chk_plans:  $("chk_plans").checked,
+      chk_emails: ($("chk_emails") ? $("chk_emails").checked : false),
+      close_bt:   ($("chk_close_bt") ? $("chk_close_bt").checked : false)
+    },
+    rel: {
+      rel_site:       $("rel_site").value       || "",
+      rel_from:       $("rel_from").value       || "",
+      rel_to:         $("rel_to").value         || "",
+      rel_period_txt: $("rel_period_txt").value || "",
+      blocks: getReleaseBlocks()
+    }
+  };
+}
+
+function applyState(state){
+  if (!state || typeof state !== 'object') throw new Error('State invalide');
+  const bt = state.bt || {};
+  $("bt").value       = bt.bt       ?? "";
+  $("site").value     = bt.site     ?? "";
+  $("equip").value    = bt.equip    ?? "";
+  $("sympt").value    = bt.sympt    ?? "";
+  $("diag").value     = bt.diag     ?? "";
+  $("act").value      = bt.act      ?? "";
+  $("act_plan").value = bt.act_plan ?? "";
+  $("chk_photos").checked = !!bt.chk_photos;
+  $("chk_logs").checked   = !!bt.chk_logs;
+  $("chk_plans").checked  = !!bt.chk_plans;
+  if ($("chk_emails"))  $("chk_emails").checked  = !!bt.chk_emails;
+  if ($("chk_close_bt")) $("chk_close_bt").checked = !!bt.close_bt;
+
+  const rel = state.rel || {};
+  $("rel_site").value       = rel.rel_site       ?? "";
+  $("rel_from").value       = rel.rel_from       ?? "";
+  $("rel_to").value         = rel.rel_to         ?? "";
+  $("rel_period_txt").value = rel.rel_period_txt ?? "";
+
+  $("rel_blocks").innerHTML = "";
+  const blocks = Array.isArray(rel.blocks) ? rel.blocks : [];
+  if (blocks.length === 0){
+    addReleaseBlock();
+  } else {
+    for (const b of blocks){
+      const el = makeReleaseBlock();
+      $("rel_blocks").appendChild(el);
+      const set = (k, v) => { const node = el.querySelector(`[data-k="${k}"]`); if (node) node.value = v ?? ""; };
+      set('equip', b.equip);
+      set('date',  b.date);
+      set('timez', b.timez);
+      set('restore', b.restore);
+      const nat = Array.isArray(b.nature) ? b.nature : (b.nature ? String(b.nature).split(/\s*\/\s*/).filter(Boolean) : []);
+      const has = (x) => nat.includes(x);
+      const ck = (k, v) => { const node = el.querySelector(`[data-k="${k}"]`); if (node) node.checked = !!v; };
+      ck('nat_pm',  has('PM'));
+      ck('nat_cm',  has('CM'));
+      ck('nat_fm',  has('FM'));
+      ck('nat_pop', has('POP'));
+      set('tech',    b.tech);
+      set('details', b.details);
+    }
+    renumberReleaseBlocks();
+  }
+  try { generateBT({ silent:true }); } catch(_e) {}
+  try { generateRel(); } catch(_e) {}
+}
+
+function tryRestoreAutosave(){
+  try {
+    const raw = localStorage.getItem(AUTOSAVE_KEY)
+      || LEGACY_AUTOSAVE_KEYS.map(k => localStorage.getItem(k)).find(v => v);
+    if (!raw) return false;
+    const obj = JSON.parse(raw);
+    applyState(obj);
+    return true;
+  } catch(_e) { return false; }
+}
+
+/* ==========================================================================
+   THÈME JOUR/NUIT
+   ========================================================================== */
+const THEME_KEY = "ui_theme_maximo";
+function applyTheme(mode){
+  const light = mode === "light";
+  document.body.classList.toggle("theme-light", light);
+  const ic = $("theme_icon");
+  if (ic) ic.textContent = light ? "☀️" : "🌙";
+  const _meta = document.querySelector('meta[name="theme-color"]');
+  if (_meta) _meta.setAttribute("content", light ? "#EAF1F7" : "#0B0F14");
+  try { localStorage.setItem(THEME_KEY, light ? "light" : "dark"); } catch(_e) {}
+}
+function toggleTheme(){
+  applyTheme(document.body.classList.contains("theme-light") ? "dark" : "light");
+}
+function initTheme(){
+  let saved = null;
+  try { saved = localStorage.getItem(THEME_KEY); } catch(_e) {}
+  applyTheme(saved === "light" ? "light" : "dark");
+}
+
+/* ==========================================================================
+   INIT
+   ========================================================================== */
+// Boutons copie/export désactivés par défaut
+const _bcr=$("btn_copy_right"); if(_bcr) _bcr.disabled = true;
+const _bct=$("btn_copy_toc");   if(_bct) _bct.disabled = true;
+const _brel=$("btn_copy_rel");  if(_brel) _brel.disabled = true;
+
+// Init langue (avant theme pour avoir le bon lang attr)
+initLang();
+
+// Init thème
+initTheme();
+
+// Status initial
+setStatus("status",     "Prêt.", "small");
+setStatus("status_rel", "Prêt. Ajoute au moins une demande.", "small");
+
+// Restaure ou crée un premier bloc
+const restored = tryRestoreAutosave();
+if (!restored) addReleaseBlock();
+
+// Applique la langue (met à jour tous les textes)
+applyLang();
+
+// Met à jour les status après applyLang
+setStatus("status",     t('status_ready'),     "small");
+setStatus("status_rel", t('status_ready_rel'), "small");
+
+/* ==========================================================================
+   HAPTICS
+   ========================================================================== */
+function hapticTap(){
+  try {
+    const cap = window.Capacitor;
+    const isNative = !!(cap && (
+      (typeof cap.isNativePlatform === "function" && cap.isNativePlatform()) ||
+      (typeof cap.getPlatform === "function" && cap.getPlatform() !== "web")
+    ));
+    const H = cap && cap.Plugins && cap.Plugins.Haptics;
+    if (isNative && H && typeof H.impact === "function"){ H.impact({ style:"LIGHT" }); return; }
+  } catch(_e) {}
+  try { if (navigator.vibrate) navigator.vibrate(10); } catch(_e) {}
+}
+
+/* ==========================================================================
+   VIEWPORT DYNAMIQUE (clavier mobile)
+   ========================================================================== */
+(function(){
+  const root = document.documentElement;
+  let baseH = window.innerHeight;
+
+  const isEditable = (el) => !!(el && (
+    el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT" || el.isContentEditable
+  ));
+
+  function setVars(){
+    const vv = window.visualViewport || null;
+    const visibleH = vv ? vv.height : window.innerHeight;
+    const activeEditable = isEditable(document.activeElement);
+    if (!activeEditable) baseH = Math.max(baseH, window.innerHeight);
+    root.style.setProperty("--vh", (visibleH * 0.01) + "px");
+    if (!activeEditable){ root.style.setProperty("--kb", "0px"); return; }
+    let kb = 0;
+    if (vv) kb = Math.max(0, baseH - visibleH);
+    else    kb = Math.max(0, baseH - window.innerHeight);
+    if (kb < 24) kb = 0;
+    root.style.setProperty("--kb", kb + "px");
+  }
+
+  setVars();
+  window.addEventListener("resize", setVars, { passive:true });
+  if (window.visualViewport){
+    window.visualViewport.addEventListener("resize", setVars, { passive:true });
+    window.visualViewport.addEventListener("scroll", setVars, { passive:true });
+  }
+
+  document.addEventListener("focusin", (e) => {
+    const el = e.target;
+    if (!isEditable(el)) return;
+    setTimeout(() => { try{ el.scrollIntoView({ block:"center", inline:"nearest" }); }catch(_e){} }, 120);
+  }, true);
+})();
+
+/* ==========================================================================
+   EFFET "PRESS" BOUTON
+   ========================================================================== */
+(function(){
+  let pressed = null;
+  const clear = () => { if(pressed){ pressed.classList.remove("isPressed"); pressed=null; } };
+
+  window.addEventListener("pointerdown", (e) => {
+    const b = e.target && e.target.closest ? e.target.closest("button") : null;
+    if (!b || b.disabled) return;
+    clear();
+    pressed = b;
+    b.classList.add("isPressed");
+    if (e.pointerType === "touch") hapticTap();
+  }, { passive:true });
+
+  window.addEventListener("pointerup",     clear, { passive:true });
+  window.addEventListener("pointercancel", clear, { passive:true });
+  window.addEventListener("blur",          clear);
+})();
+
+</script>
+
+<script>
+/* ===========================
+   Mesure dynamique headbar
+   =========================== */
+(function(){
+  const root = document.documentElement;
+  const hb   = document.querySelector('.headbar');
+  if (!hb) return;
+
+  const set = () => {
+    const h = Math.ceil(hb.getBoundingClientRect().height || 0);
+    if (h > 0) root.style.setProperty('--headbar-h', h + 'px');
+  };
+
+  const rafSet = () => requestAnimationFrame(set);
+  window.addEventListener('resize', rafSet, { passive:true });
+  window.addEventListener('orientationchange', () => setTimeout(set, 180), { passive:true });
+  setTimeout(set, 50);
+  setTimeout(set, 250);
+  rafSet();
+})();
+</script>
+
+<script>
+/* PWA service worker */
+(function(){
+  if (!("serviceWorker" in navigator)) return;
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js", { scope:"./" }).catch(() => {});
+  });
+})();
+</script>
+
+</body>
+</html>
